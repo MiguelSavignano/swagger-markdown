@@ -93,10 +93,13 @@ export const processDefinition = (name, definition) => {
  */
 export const transformDefinition = (definitions) => {
   const res = [];
-  Object.keys(definitions).forEach((definitionName) => res.push(processDefinition(
-    definitionName,
-    definitions[definitionName],
-  )));
+  Object.keys(definitions).forEach((definitionName) => {
+    let definition = definitions[definitionName]
+    if (definition["allOf"]) {
+      definition = definition["allOf"].reduce((acc,value) => ({...acc, value}))
+    }
+    return res.push(processDefinition(definitionName, definition)
+  });
   if (res.length > 0) {
     res.unshift('### Models\n');
     return res.join('\n');
