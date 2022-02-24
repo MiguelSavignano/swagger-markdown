@@ -1,0 +1,42 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.transformSecurity = void 0;
+const transformSecurity = (security) => {
+    const res = [];
+    let maxLength = 0;
+    security.forEach((rules) => {
+        Object.keys(rules).forEach((key) => {
+            maxLength = rules[key].length > maxLength ? rules[key].length : maxLength;
+        });
+    });
+    maxLength++;
+    if (maxLength < 2) {
+        maxLength = 2;
+    }
+    security.forEach((rules) => {
+        Object.keys(rules).forEach((key) => {
+            const line = [key].concat(rules[key]);
+            while (line.length < maxLength) {
+                line.push('');
+            }
+            let lineReduced = line.reduce((prev, curr) => `${prev} ${curr || ''} |`, '|');
+            lineReduced = lineReduced.replace(/\s{2,}/g, ' ');
+            res.push(lineReduced);
+        });
+    });
+    if (res.length) {
+        let line = Array(maxLength).fill(' --- ');
+        res.unshift(`|${line.join('|')}|`);
+        line = [];
+        line.push(' Security Schema ');
+        line.push(' Scopes ');
+        while (line.length < maxLength) {
+            line.push(' ');
+        }
+        res.unshift(`|${line.join('|')}|`);
+        res.unshift('##### Security\n');
+        return res.join('\n');
+    }
+    return '';
+};
+exports.transformSecurity = transformSecurity;

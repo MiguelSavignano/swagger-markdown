@@ -17,13 +17,13 @@ function parseProperties(name: string, definition) {
     const descriptionParts = [];
     if ('description' in prop) {
       descriptionParts.push(
-        textEscape(
-          prop.description.replace(/[\r\n]/g, ' '),
-        ),
+        textEscape(prop.description.replace(/[\r\n]/g, ' ')),
       );
     }
     if ('enum' in prop) {
-      const enumValues = prop.enum.map((val) => `\`${JSON.stringify(val)}\``).join(', ');
+      const enumValues = prop.enum
+        .map((val) => `\`${JSON.stringify(val)}\``)
+        .join(', ');
       descriptionParts.push(`_Enum:_ ${enumValues}`);
     }
     if ('example' in prop) {
@@ -31,7 +31,9 @@ function parseProperties(name: string, definition) {
     }
     const descriptionCell = descriptionParts.join('<br>');
     const requiredCell = required.includes(propName) ? 'Yes' : 'No';
-    res.push(`| ${propName} | ${typeCell} | ${descriptionCell} | ${requiredCell} |`);
+    res.push(
+      `| ${propName} | ${typeCell} | ${descriptionCell} | ${requiredCell} |`,
+    );
   });
   return res;
 }
@@ -44,7 +46,9 @@ function parseProperties(name: string, definition) {
 const parsePrimitive = (name, definition) => {
   const res = [];
   const typeCell = 'type' in definition ? definition.type : '';
-  const descriptionCell = ('description' in definition ? definition.description : '').replace(/[\r\n]/g, ' ');
+  const descriptionCell = (
+    'description' in definition ? definition.description : ''
+  ).replace(/[\r\n]/g, ' ');
   const requiredCell = '';
   res.push(`| ${name} | ${typeCell} | ${descriptionCell} | ${requiredCell} |`);
   return res;
@@ -76,9 +80,10 @@ export const processDefinition = (name, definition) => {
   res = res.concat(parsedDef);
 
   if (definition.example) {
-    const formattedExample = typeof definition.example === 'string'
-      ? definition.example
-      : JSON.stringify(definition.example, null, '  ');
+    const formattedExample =
+      typeof definition.example === 'string'
+        ? definition.example
+        : JSON.stringify(definition.example, null, '  ');
     res.push('');
     res.push('**Example**');
     res.push(`<pre>${formattedExample}</pre>`);
@@ -94,11 +99,14 @@ export const processDefinition = (name, definition) => {
 export const transformDefinition = (definitions) => {
   const res = [];
   Object.keys(definitions).forEach((definitionName) => {
-    let definition = definitions[definitionName]
-    if (definition["allOf"]) {
-      definition = definition["allOf"].reduce((acc,value) => ({...acc, value}))
+    let definition = definitions[definitionName];
+    if (definition['allOf']) {
+      definition = definition['allOf'].reduce((acc, value) => ({
+        ...acc,
+        value,
+      }));
     }
-    return res.push(processDefinition(definitionName, definition)
+    return res.push(processDefinition(definitionName, definition));
   });
   if (res.length > 0) {
     res.unshift('### Models\n');

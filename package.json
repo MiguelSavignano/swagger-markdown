@@ -2,7 +2,7 @@
   "name": "swagger-markdown",
   "version": "1.4.4",
   "description": "Create markdown API documentation from swagger file",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm run test:app && npm run test:lint && npm run test:markdown",
     "test:app": "jest",
@@ -18,7 +18,7 @@
     "prepare": "husky install"
   },
   "bin": {
-    "swagger-markdown": "src/index.js"
+    "swagger-markdown": "dist/index.js"
   },
   "config": {
     "commitizen": {

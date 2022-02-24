@@ -40,7 +40,7 @@ jspm_packages
 .idea
 
 # build
-dist
+# dist
 
 tmp
 .vscode
