@@ -91,7 +91,7 @@ const transformDefinition = (definitions) => {
     Object.keys(definitions).forEach((definitionName) => {
         let definition = definitions[definitionName];
         if (definition['allOf']) {
-            definition = definition['allOf'].reduce((acc, value) => (Object.assign(Object.assign({}, acc), { value })));
+            definition = definition['allOf'].reduce((acc, value) => ({...acc, ...value }));
         }
         return res.push((0, exports.processDefinition)(definitionName, definition));
     });
